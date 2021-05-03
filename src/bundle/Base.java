@@ -1,8 +1,10 @@
 package bundle;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -11,9 +13,18 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.MobileCapabilityType;
 
 public class Base {
+	
+	static Properties property;
+	static FileInputStream s;
 
-	public static AndroidDriver<AndroidElement> capabilitySetup() throws MalformedURLException {
+	public static AndroidDriver<AndroidElement> capabilitySetup() throws IOException {
 		// TODO Auto-generated method stub
+		
+		s = new FileInputStream(System.getProperty("user.dir")+"\\config.properties");
+		
+		property = new Properties();
+		
+		property.load(s);
 		
 		File f = new File("src");
 		

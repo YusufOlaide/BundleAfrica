@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "25594b32-824f-4be7-b439-f15a5e6c4b0b",
+		"name": "BUNDLE AFRICA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Parse CSV File",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 200', ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Value Assertions',() =>{\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"   pm.expect(pm.response.text()).to.include('id');\r",
+							"   pm.expect(pm.response.text()).to.include('companies');\r",
+							"\r",
+							"   //DataProperties\r",
+							"   pm.expect(responseJson.companies).to.ownProperty('GBank');\r",
+							"   pm.expect(responseJson.companies).to.ownProperty('Bundle');\r",
+							"\r",
+							"    //Data-Types Testing\r",
+							"   pm.expect(responseJson.id).to.be.a('string');\r",
+							"   pm.expect(responseJson.companies.GBank).to.be.a('number');\r",
+							"   pm.expect(responseJson.companies.Bundle).to.be.a('number');\r",
+							"\r",
+							"    //Value-Check Testing\r",
+							"   pm.expect(responseJson.companies.GBank).to.eql(800.00);\r",
+							"   pm.expect(responseJson.companies.Bundle).to.eql(3380.00);\r",
+							"});\r",
+							"\r",
+							"//Negative Testing\r",
+							"   pm.test('CSV Property is Undefined', ()=>{\r",
+							"       const responseJson = pm.response.json();\r",
+							"       pm.expect(responseJson.csv).to.be.undefined;\r",
+							"   });\r",
+							"\r",
+							"pm.environment.set('invoice_id', responseJson.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payload\": \"RW1wbG95ZWUgSUQsQmlsbGFibGUgUmF0ZSAocGVyIGhvdXIpLFByb2plY3QsRGF0ZSxTdGFydCBUaW1lLEVuZCBUaW1lCjEsMzUsQnVuZGxlLDIwMTktMDctMDEsMDk6MDAsMTc6MDAKMiwxMDAsR0JhbmssMjAxOS0wNy0wMSwxMTowMCwxNjowMAo0LDM1MCxCdW5kbGUsMjAxOS0wNy0wMSwwOTowMCwxNzowMAo0LDMwMCxCdW5kbGUsMjAxOS0wNy0wMSwxOTowMCwyMDozMAoyLDEwMCxHQmFuaywyMDE5LTA3LTAxLDEzOjAwLDE2OjAw\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/invoice/parse",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"parse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Parse INVALID CSV File",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 400', ()=>{\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Value Assertions',() =>{\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"   pm.expect(pm.response.text()).to.include('timestamp');\r",
+							"   pm.expect(pm.response.text()).to.include('status');\r",
+							"   pm.expect(pm.response.text()).to.include('error');\r",
+							"   pm.expect(pm.response.text()).to.include('message');\r",
+							"   pm.expect(pm.response.text()).to.include('path');\r",
+							"\r",
+							"    //Data-Types Testing\r",
+							"   pm.expect(responseJson.timestamp).to.be.a('string');\r",
+							"   pm.expect(responseJson.status).to.be.a('number');\r",
+							"   pm.expect(responseJson.error).to.be.a('string');\r",
+							"   pm.expect(responseJson.message).to.be.a('string');\r",
+							"   pm.expect(responseJson.path).to.be.a('string');\r",
+							"\r",
+							"    //Value-Check Testing\r",
+							"   pm.expect(responseJson.status).to.eql(400);\r",
+							"   pm.expect(responseJson.error).to.eql('Bad Request');\r",
+							"   pm.expect(responseJson.message).to.include('InvalidFormatException');\r",
+							"   pm.expect(responseJson.path).to.eql('/invoice/parse');\r",
+							"});\r",
+							"\r",
+							"//Negative Testing\r",
+							"   pm.test('Success Property is Undefined', ()=>{\r",
+							"       const responseJson = pm.response.json();\r",
+							"       pm.expect(responseJson.success).to.be.undefined;\r",
+							"   });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payload\": \"wrongPayload123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/invoice/parse",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"parse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Invoice Parsing Result by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 200', ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Invoice ID Verification\", () => {\r",
+							" pm.expect(pm.environment.get('invoice_id')).to.eql(responseJson.id);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/invoice/{{invoice_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"{{invoice_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get INAVLID Invoice Parsing Result by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 200', ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Value Assertions',() =>{\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"   pm.expect(pm.response.text()).to.include('id');\r",
+							"   pm.expect(pm.response.text()).to.include('companies');\r",
+							"\r",
+							"   pm.expect(responseJson.id).to.be.a('string');\r",
+							"   pm.expect(responseJson.id == pm.environment.get('invalidInvoiceID'));\r",
+							"   pm.expect(responseJson.companies).to.be.empty;\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/invoice/{{invalidInvoiceID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"{{invalidInvoiceID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Company details from an Invoice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 200', ()=>{\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Value Assertions',() =>{\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"   pm.expect(pm.response.text()).to.include('name');\r",
+							"   pm.expect(pm.response.text()).to.include('lineItems');\r",
+							"   pm.expect(pm.response.text()).to.include('totalAmount');\r",
+							"\r",
+							"   //DataProperties\r",
+							"   pm.expect(responseJson.lineItems[0]).to.ownProperty('employeeId');\r",
+							"   pm.expect(responseJson.lineItems[0]).to.ownProperty('ratePerHour');\r",
+							"   pm.expect(responseJson.lineItems[0]).to.ownProperty('hoursWorked');\r",
+							"\r",
+							"    //Data-Types Testing\r",
+							"   pm.expect(responseJson.name).to.be.a('string');\r",
+							"   pm.expect(responseJson.lineItems[0].employeeId).to.be.a('string');\r",
+							"   pm.expect(responseJson.lineItems[0].ratePerHour).to.be.a('number');\r",
+							"   pm.expect(responseJson.lineItems[0].hoursWorked).to.be.a('number');\r",
+							"   pm.expect(responseJson.totalAmount).to.be.a('number');\r",
+							"\r",
+							"    //Value-Check Testing\r",
+							"   pm.expect(responseJson.name).to.eql('GBank');\r",
+							"   pm.expect(responseJson.lineItems[0].employeeId).to.eql('2');\r",
+							"   pm.expect(responseJson.lineItems[0].ratePerHour).to.eql(100.00);\r",
+							"   pm.expect(responseJson.lineItems[0].hoursWorked).to.eql(5);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Value Calculations\", () => {\r",
+							"const responseJson = pm.response.json();\r",
+							"let rate = responseJson.lineItems[0].ratePerHour\r",
+							"let hour1 = responseJson.lineItems[0].hoursWorked\r",
+							"let hour2 = responseJson.lineItems[1].hoursWorked\r",
+							"let rev1 = rate * hour1\r",
+							"let rev2 = rate * hour2\r",
+							"\r",
+							"let finalRev = rev1 + rev2\r",
+							"pm.expect(finalRev == responseJson.totalAmount);\r",
+							"});\r",
+							"\r",
+							"//Negative Testing\r",
+							"   pm.test('Error Property is Undefined', ()=>{\r",
+							"       const responseJson = pm.response.json();\r",
+							"       pm.expect(responseJson.error).to.be.undefined;\r",
+							"   });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/invoice/{{invoice_id}}/company?companyName=GBank",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"{{invoice_id}}",
+						"company"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "GBank"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get INVALID Company details from an Invoice",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"pm.test('Response code is 404', ()=>{\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response Time is below 200', ()=>{\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is present\", () => {\r",
+							"  pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content-Type header is application/json\", () => {\r",
+							" pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json;charset=UTF-8');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Value Assertions',() =>{\r",
+							"   const responseJson = pm.response.json();\r",
+							"   pm.expect(responseJson).to.be.an('object');\r",
+							"   pm.expect(pm.response.text()).to.include('error');\r",
+							"\r",
+							"   //Data-Types Testing\r",
+							"   pm.expect(responseJson.error).to.be.a('string');\r",
+							"\r",
+							"   //Value-Check Testing\r",
+							"   pm.expect(responseJson.error).to.eql('The specified company invoice was not found');\r",
+							"});\r",
+							"\r",
+							"//Negative Testing\r",
+							"   pm.test('Success Property is Undefined', ()=>{\r",
+							"       const responseJson = pm.response.json();\r",
+							"       pm.expect(responseJson.success).to.be.undefined;\r",
+							"   });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/invoice/{{invoice_id}}/company?companyName=Google",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"invoice",
+						"{{invoice_id}}",
+						"company"
+					],
+					"query": [
+						{
+							"key": "companyName",
+							"value": "Google"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
